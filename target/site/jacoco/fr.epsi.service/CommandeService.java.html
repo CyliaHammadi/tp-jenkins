@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommandeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tp-jenkins</a> &gt; <a href="index.source.html" class="el_package">fr.epsi.service</a> &gt; <span class="el_source">CommandeService.java</span></div><h1>CommandeService.java</h1><pre class="source lang-java linenums">package fr.epsi.service;
+
+import fr.epsi.model.Panier;
+
+<span class="fc" id="L5">public class CommandeService {</span>
+
+    public static final double SEUIL_LIVRAISON_GRATUITE = 50.0;
+    public static final double FRAIS_LIVRAISON = 5.90;
+    public static final double TAUX_TVA = 0.20;
+
+    public double calculerFraisLivraison(Panier panier) {
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        if (panier.estVide()) throw new IllegalArgumentException(&quot;Panier vide&quot;);</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        return panier.calculerTotal() &gt;= SEUIL_LIVRAISON_GRATUITE ? 0.0 : FRAIS_LIVRAISON;</span>
+    }
+
+    public double calculerTVA(Panier panier) {
+<span class="fc" id="L17">        return panier.calculerTotal() * TAUX_TVA;</span>
+    }
+
+    public double calculerTotalTTC(Panier panier) {
+<span class="fc" id="L21">        return panier.calculerTotal() + calculerTVA(panier) + calculerFraisLivraison(panier);</span>
+    }
+
+    public boolean validerCommande(Panier panier, String adresse) {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (panier.estVide()) return false;</span>
+<span class="pc bpc" id="L26" title="1 of 4 branches missed.">        if (adresse == null || adresse.isBlank()) return false;</span>
+<span class="fc" id="L27">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
