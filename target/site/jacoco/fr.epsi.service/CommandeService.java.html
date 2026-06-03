@@ -4,27 +4,29 @@ import fr.epsi.model.Panier;
 
 <span class="fc" id="L5">public class CommandeService {</span>
 
-    public static final double SEUIL_LIVRAISON_GRATUITE = 50.0;
-    public static final double FRAIS_LIVRAISON = 5.90;
-    public static final double TAUX_TVA = 0.20;
-
-    public double calculerFraisLivraison(Panier panier) {
-<span class="fc bfc" id="L12" title="All 2 branches covered.">        if (panier.estVide()) throw new IllegalArgumentException(&quot;Panier vide&quot;);</span>
-<span class="fc bfc" id="L13" title="All 2 branches covered.">        return panier.calculerTotal() &gt;= SEUIL_LIVRAISON_GRATUITE ? 0.0 : FRAIS_LIVRAISON;</span>
+    public double calculerTotal(Panier panier) {
+<span class="fc bfc" id="L8" title="All 4 branches covered.">        if (panier == null || panier.estVide()) {</span>
+<span class="fc" id="L9">            throw new IllegalArgumentException(&quot;Panier null ou vide&quot;);</span>
+        }
+<span class="fc" id="L11">        double total = 0;</span>
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        for (int i = 0; i &lt; panier.getArticles().size(); i++) {</span>
+<span class="fc" id="L13">            total += panier.getArticles().get(i).getPrix()</span>
+<span class="fc" id="L14">                     * panier.getQuantites().get(i);</span>
+        }
+<span class="fc" id="L16">        return total;</span>
     }
 
-    public double calculerTVA(Panier panier) {
-<span class="fc" id="L17">        return panier.calculerTotal() * TAUX_TVA;</span>
+    public double appliquerRemise(double total, int pourcentage) {
+<span class="fc bfc" id="L20" title="All 4 branches covered.">        if (pourcentage &lt; 0 || pourcentage &gt; 100) {</span>
+<span class="fc" id="L21">            throw new IllegalArgumentException(&quot;Pourcentage invalide&quot;);</span>
+        }
+<span class="fc" id="L23">        return total * (1 - pourcentage / 100.0);</span>
     }
 
-    public double calculerTotalTTC(Panier panier) {
-<span class="fc" id="L21">        return panier.calculerTotal() + calculerTVA(panier) + calculerFraisLivraison(panier);</span>
-    }
-
-    public boolean validerCommande(Panier panier, String adresse) {
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (panier.estVide()) return false;</span>
-<span class="pc bpc" id="L26" title="1 of 4 branches missed.">        if (adresse == null || adresse.isBlank()) return false;</span>
-<span class="fc" id="L27">        return true;</span>
+    public String categoriserCommande(double total) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (total &lt; 50)  return &quot;PETITE&quot;;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (total &lt; 200) return &quot;MOYENNE&quot;;</span>
+<span class="fc" id="L29">        return &quot;GRANDE&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

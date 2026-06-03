@@ -5,18 +5,15 @@ import java.util.List;
 
 public class Panier {
     private List<Article> articles = new ArrayList<>();
+    private List<Integer> quantites = new ArrayList<>();
 
-    public void ajouterArticle(Article article) {
+    public void ajouter(Article article, int quantite) {
         articles.add(article);
+        quantites.add(quantite);
     }
 
     public List<Article> getArticles() { return articles; }
-
-    public double calculerTotal() {
-        return articles.stream()
-            .mapToDouble(a -> a.getPrix() * a.getQuantite())
-            .sum();
-    }
+    public List<Integer> getQuantites() { return quantites; }
 
     public boolean estVide() { return articles.isEmpty(); }
 }

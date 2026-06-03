@@ -2,32 +2,60 @@ package fr.epsi.service;
 
 import fr.epsi.model.Article;
 import fr.epsi.model.Panier;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommandeServiceIT {
 
-    @Test void scenarioAchatComplet_avecLivraison() {
+    private final CommandeService service = new CommandeService();
+
+    @Test
+    @DisplayName("Scenario complet panier mixte PETITE")
+    void pipeline_PanierMixte_CategorisationCorrecte() {
+        // GIVEN
         Panier panier = new Panier();
-        panier.ajouterArticle(new Article("Cahier", 3.0, 3));
-        CommandeService service = new CommandeService();
-        double total = service.calculerTotalTTC(panier);
-        assertTrue(total > 9.0);
-        assertTrue(service.validerCommande(panier, "5 avenue Lyon"));
+        panier.ajouter(new Article("Stylo",  2.0), 10);
+        panier.ajouter(new Article("Cahier", 5.0),  4);
+        // WHEN
+        double total       = service.calculerTotal(panier);
+        double apresRemise = service.appliquerRemise(total, 10);
+        String categorie   = service.categoriserCommande(apresRemise);
+        // THEN
+        assertEquals(40.0,     total,       0.001);
+        assertEquals(36.0,     apresRemise, 0.001);
+        assertEquals("PETITE", categorie);
     }
 
-    @Test void scenarioAchatComplet_livraisonGratuite() {
+    @Test
+    @DisplayName("Commande premium GRANDE")
+    void pipeline_PanierPremium_CategorieGrande() {
+        // GIVEN
         Panier panier = new Panier();
-        panier.ajouterArticle(new Article("Écran", 200.0, 1));
-        CommandeService service = new CommandeService();
-        assertEquals(0.0, service.calculerFraisLivraison(panier));
+        panier.ajouter(new Article("Ordinateur", 800.0), 1);
+        panier.ajouter(new Article("Souris",      30.0), 2);
+        // WHEN
+        double total       = service.calculerTotal(panier);
+        double apresRemise = service.appliquerRemise(total, 5);
+        String categorie   = service.categoriserCommande(apresRemise);
+        // THEN
+        assertEquals(860.0,    total,       0.001);
+        assertEquals(817.0,    apresRemise, 0.001);
+        assertEquals("GRANDE", categorie);
     }
 
-    @Test void scenarioPanierMultiArticles() {
+    @Test
+    @DisplayName("Remise 100% total zero PETITE")
+    void pipeline_RemiseTotale_TotalZeroCategorisePetite() {
+        // GIVEN
         Panier panier = new Panier();
-        panier.ajouterArticle(new Article("Souris", 25.0, 1));
-        panier.ajouterArticle(new Article("Clavier", 45.0, 1));
-        CommandeService service = new CommandeService();
-        assertEquals(84.0, service.calculerTotalTTC(panier), 0.001);
+        panier.ajouter(new Article("Cadeau", 150.0), 1);
+        // WHEN
+        double total       = service.calculerTotal(panier);
+        double apresRemise = service.appliquerRemise(total, 100);
+        String categorie   = service.categoriserCommande(apresRemise);
+        // THEN
+        assertEquals(0.0,      apresRemise, 0.001);
+        assertEquals("PETITE", categorie);
     }
 }

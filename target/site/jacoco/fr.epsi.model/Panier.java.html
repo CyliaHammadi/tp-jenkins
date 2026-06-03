@@ -5,19 +5,16 @@ import java.util.List;
 
 <span class="fc" id="L6">public class Panier {</span>
 <span class="fc" id="L7">    private List&lt;Article&gt; articles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L8">    private List&lt;Integer&gt; quantites = new ArrayList&lt;&gt;();</span>
 
-    public void ajouterArticle(Article article) {
-<span class="fc" id="L10">        articles.add(article);</span>
-<span class="fc" id="L11">    }</span>
+    public void ajouter(Article article, int quantite) {
+<span class="fc" id="L11">        articles.add(article);</span>
+<span class="fc" id="L12">        quantites.add(quantite);</span>
+<span class="fc" id="L13">    }</span>
 
-<span class="nc" id="L13">    public List&lt;Article&gt; getArticles() { return articles; }</span>
+<span class="fc" id="L15">    public List&lt;Article&gt; getArticles() { return articles; }</span>
+<span class="fc" id="L16">    public List&lt;Integer&gt; getQuantites() { return quantites; }</span>
 
-    public double calculerTotal() {
-<span class="fc" id="L16">        return articles.stream()</span>
-<span class="fc" id="L17">            .mapToDouble(a -&gt; a.getPrix() * a.getQuantite())</span>
-<span class="fc" id="L18">            .sum();</span>
-    }
-
-<span class="fc" id="L21">    public boolean estVide() { return articles.isEmpty(); }</span>
+<span class="fc" id="L18">    public boolean estVide() { return articles.isEmpty(); }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

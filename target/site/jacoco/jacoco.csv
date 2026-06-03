@@ -1,4 +1,4 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-tp-jenkins,fr.epsi.service,CommandeService,0,50,1,9,0,8,1,9,0,5
-tp-jenkins,fr.epsi.model,Panier,3,32,0,0,1,8,1,5,1,5
-tp-jenkins,fr.epsi.model,Article,7,18,0,0,2,7,2,3,2,3
+tp-jenkins,fr.epsi.service,CommandeService,0,76,0,14,0,14,0,11,0,4
+tp-jenkins,fr.epsi.model,Panier,0,35,0,0,0,9,0,5,0,5
+tp-jenkins,fr.epsi.model,Article,3,12,0,0,1,5,1,2,1,2
