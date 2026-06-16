@@ -1,0 +1,53 @@
+---
+- name: Deploy Custom Nginx App to K3d
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    # On force Ansible à utiliser le Python de Codespaces qui possède le paquet kubernetes
+    ansible_python_interpreter: /usr/local/python/current/bin/python3
+
+  tasks:
+    - name: Create Nginx Deployment
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx-custom-deployment
+            namespace: default
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: my-nginx
+            template:
+              metadata:
+                labels:
+                  app: my-nginx
+              spec:
+                containers:
+                  - name: nginx
+                    image: my-nginx-custom:v1
+                    imagePullPolicy: Never
+                    ports:
+                      - containerPort: 80
+
+    - name: Create Nginx NodePort Service
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx-custom-service
+            namespace: default
+          spec:
+            type: NodePort
+            selector:
+              app: my-nginx
+            ports:
+              - port: 80
+                targetPort: 80
+                nodePort: 30080            
